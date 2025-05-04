@@ -46,16 +46,13 @@
       text-decoration: none;
       border-radius: 8px;
       transition: background 0.3s ease;
+      cursor: pointer;
     }
     .btn:hover {
       background-color: #00e676;
     }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: translateY(0);}    
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); }    
-    }
+    @keyframes fadeIn { from {opacity: 0;transform: translateY(20px);} to {opacity:1;transform:translateY(0);} }
+    @keyframes bounce {0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
   </style>
 </head>
 <body>
@@ -64,46 +61,46 @@
     <p>No tricks · Fast Withdrawal · 24/7 Support</p>
     <div class="crypto-icons">₿ Ξ Ⓜ 💵</div>
 
-    <!-- 联系客服 -->
-    <a href="#" id="btn-support" class="btn">📩 Contact Support</a>
-    <!-- 假充值按钮 -->
-    <a href="#" id="btn-deposit" class="btn">✅ I Have Deposited</a>
-    <!-- 直接跳转游戏 -->
-    <a href="#" id="btn-play" class="btn">🚀 Play Now</a>
+    <!-- 1. 联系客服 -->
+    <a class="btn" href="https://t.me/bnn20230323" target="_blank">
+      📩 Contact Support
+    </a>
+
+    <!-- 2. 假充值按钮 -->
+    <div id="btn-deposit" class="btn">✅ I Have Deposited</div>
+
+    <!-- 3. 直接跳转游戏 -->
+    <div id="btn-play" class="btn">🚀 Play Now</div>
   </div>
 
   <script>
-    // PopAds Client-side Pixel Setup
-    const AID = 'a8489615109ee5294da346c65ed8c577'; // ← 这里替换为你的 Advertiser ID
-    const params = new URLSearchParams(window.location.search);
-    const IMP = params.get('impressionId') || '';
+    // 从 URL 拿到 impressionId 参数
+    function getQueryParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+    const impressionId = getQueryParam('impressionId') || '';
 
-    function fireClientPixel(value) {
-      if (!IMP) return;
+    // PopAds 给你的 aid 值（一定要填对）
+    const POPADS_AID = 'a8489615109ee5294da346c65ed8c577';
+
+    // 动态发送像素：s2s=0 表示 client-side pixel
+    function firePixel(value = 0) {
       const img = new Image();
-      img.src = 'https://serve.popads.net/cpixel.php?s2s=0&aid=' + encodeURIComponent(AID) +
-                '&id=' + encodeURIComponent(IMP) + '&value=' + encodeURIComponent(value);
-      img.width = 1;
-      img.height = 1;
-      img.style.display = 'none';
+      img.src = `https://serve.popads.net/cpixel.php?s2s=0&aid=${POPADS_AID}&id=${impressionId}&value=${value}`;
+      // 将它添加到页面（浏览器会加载）
       document.body.appendChild(img);
     }
 
-    document.getElementById('btn-support').addEventListener('click', function(e) {
-      e.preventDefault();
-      fireClientPixel(0);
-      window.open('https://t.me/bnn20230323', '_blank');
-    });
-
-    document.getElementById('btn-deposit').addEventListener('click', function(e) {
-      e.preventDefault();
-      fireClientPixel(10);
+    // 点击 “I Have Deposited” 时先弹窗，再打像素
+    document.getElementById('btn-deposit').addEventListener('click', () => {
       alert('Thanks for depositing! Our support will reach out shortly.');
+      firePixel(0.00);
     });
 
-    document.getElementById('btn-play').addEventListener('click', function(e) {
-      e.preventDefault();
-      fireClientPixel(0);
+    // 点击 “Play Now” 时先打像素（value=0），再跳转
+    document.getElementById('btn-play').addEventListener('click', () => {
+      firePixel(0.00);
       window.location.href = 'https://9kbossau.com';
     });
   </script>
