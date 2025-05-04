@@ -51,12 +51,10 @@
       background-color: #00e676;
     }
     @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
+      from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: translateY(0);}    
     }
     @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
+      0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); }    
     }
   </style>
 </head>
@@ -67,19 +65,47 @@
     <div class="crypto-icons">₿ Ξ Ⓜ 💵</div>
 
     <!-- 联系客服 -->
-    <a class="btn" href="https://t.me/bnn20230323" target="_blank">
-      📩 Contact Support
-    </a>
-
+    <a href="#" id="btn-support" class="btn">📩 Contact Support</a>
     <!-- 假充值按钮 -->
-    <a class="btn" href="#" onclick="alert('Thanks for depositing! Our support will reach out shortly.');">
-      ✅ I Have Deposited
-    </a>
-
+    <a href="#" id="btn-deposit" class="btn">✅ I Have Deposited</a>
     <!-- 直接跳转游戏 -->
-    <a class="btn" href="https://9kbossau.com" target="_blank">
-      🚀 Play Now
-    </a>
+    <a href="#" id="btn-play" class="btn">🚀 Play Now</a>
   </div>
+
+  <script>
+    // PopAds Client-side Pixel Setup
+    const AID = 'a8489615109ee5294da346c65ed8c577'; // ← 这里替换为你的 Advertiser ID
+    const params = new URLSearchParams(window.location.search);
+    const IMP = params.get('impressionId') || '';
+
+    function fireClientPixel(value) {
+      if (!IMP) return;
+      const img = new Image();
+      img.src = 'https://serve.popads.net/cpixel.php?s2s=0&aid=' + encodeURIComponent(AID) +
+                '&id=' + encodeURIComponent(IMP) + '&value=' + encodeURIComponent(value);
+      img.width = 1;
+      img.height = 1;
+      img.style.display = 'none';
+      document.body.appendChild(img);
+    }
+
+    document.getElementById('btn-support').addEventListener('click', function(e) {
+      e.preventDefault();
+      fireClientPixel(0);
+      window.open('https://t.me/bnn20230323', '_blank');
+    });
+
+    document.getElementById('btn-deposit').addEventListener('click', function(e) {
+      e.preventDefault();
+      fireClientPixel(10);
+      alert('Thanks for depositing! Our support will reach out shortly.');
+    });
+
+    document.getElementById('btn-play').addEventListener('click', function(e) {
+      e.preventDefault();
+      fireClientPixel(0);
+      window.location.href = 'https://9kbossau.com';
+    });
+  </script>
 </body>
 </html>
