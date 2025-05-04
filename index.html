@@ -21,20 +21,9 @@
       box-shadow: 0 0 15px rgba(0, 255, 128, 0.3);
       animation: fadeIn 1.2s ease-out;
     }
-    h2 {
-      font-size: 24px;
-      margin-bottom: 15px;
-    }
-    p {
-      font-size: 16px;
-      margin: 12px 0;
-      color: #ccc;
-    }
-    .crypto-icons {
-      margin: 20px 0;
-      font-size: 28px;
-      animation: bounce 2s infinite;
-    }
+    h2 { font-size: 24px; margin-bottom: 15px; }
+    p { font-size: 16px; margin: 12px 0; color: #ccc; }
+    .crypto-icons { margin: 20px 0; font-size: 28px; animation: bounce 2s infinite; }
     .btn {
       display: block;
       width: 100%;
@@ -46,13 +35,14 @@
       text-decoration: none;
       border-radius: 8px;
       transition: background 0.3s ease;
-      cursor: pointer;
     }
-    .btn:hover {
-      background-color: #00e676;
+    .btn:hover { background-color: #00e676; }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: translateY(0);}
     }
-    @keyframes fadeIn { from {opacity: 0;transform: translateY(20px);} to {opacity:1;transform:translateY(0);} }
-    @keyframes bounce {0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+    @keyframes bounce {
+      0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);}
+    }
   </style>
 </head>
 <body>
@@ -61,47 +51,45 @@
     <p>No tricks · Fast Withdrawal · 24/7 Support</p>
     <div class="crypto-icons">₿ Ξ Ⓜ 💵</div>
 
-    <!-- 1. 联系客服 -->
-    <a class="btn" href="https://t.me/bnn20230323" target="_blank">
-      📩 Contact Support
-    </a>
-
-    <!-- 2. 假充值按钮 -->
-    <div id="btn-deposit" class="btn">✅ I Have Deposited</div>
-
-    <!-- 3. 直接跳转游戏 -->
-    <div id="btn-play" class="btn">🚀 Play Now</div>
+    <a href="https://t.me/bnn20230323" id="btn-support" class="btn">📩 Contact Support</a>
+    <a href="#"                 id="btn-deposit" class="btn">✅ I Have Deposited</a>
+    <a href="https://9kbossau.com" id="btn-play"   class="btn" target="_blank">🚀 Play Now</a>
   </div>
 
   <script>
-    // 从 URL 拿到 impressionId 参数
+    // 从 URL 拿到 impressionId
     function getQueryParam(name) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name);
+      return new URLSearchParams(window.location.search).get(name) || '';
     }
-    const impressionId = getQueryParam('impressionId') || '';
+    const impressionId = getQueryParam('impressionId');
 
-    // PopAds 给你的 aid 值（一定要填对）
+    // PopAds 给你的 aid
     const POPADS_AID = 'a8489615109ee5294da346c65ed8c577';
 
-    // 动态发送像素：s2s=0 表示 client-side pixel
+    // 动态发送像素函数：s2s=0 表示 client-side
     function firePixel(value = 0) {
       const img = new Image();
       img.src = `https://serve.popads.net/cpixel.php?s2s=0&aid=${POPADS_AID}&id=${impressionId}&value=${value}`;
-      // 将它添加到页面（浏览器会加载）
       document.body.appendChild(img);
     }
 
-    // 点击 “I Have Deposited” 时先弹窗，再打像素
-    document.getElementById('btn-deposit').addEventListener('click', () => {
-      alert('Thanks for depositing! Our support will reach out shortly.');
-      firePixel(0.00);
+    // 给三个按钮都绑定 click 事件，分别上报一次
+    document.getElementById('btn-support').addEventListener('click', () => {
+      firePixel(0);
+      // 然后自然转到 t.me 链接
     });
 
-    // 点击 “Play Now” 时先打像素（value=0），再跳转
+    document.getElementById('btn-deposit').addEventListener('click', e => {
+      e.preventDefault();
+      // 假充值 value 也可以改成实际金额
+      firePixel(0);
+      alert('Thanks for depositing! Our support will reach out shortly.');
+    });
+
     document.getElementById('btn-play').addEventListener('click', () => {
-      firePixel(0.00);
-      window.location.href = 'https://9kbossau.com';
+      // 也想追踪“Play Now”点击时的行为，可以给它一个非零值或 0
+      firePixel(0);
+      // 然后打开游戏链接，target="_blank" 已在标签里
     });
   </script>
 </body>
