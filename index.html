@@ -18,23 +18,12 @@
       max-width: 420px;
       margin: auto;
       border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0, 255, 128, 0.3);
+      box-shadow: 0 0 15px rgba(0,255,128,0.3);
       animation: fadeIn 1.2s ease-out;
     }
-    h2 {
-      font-size: 24px;
-      margin-bottom: 15px;
-    }
-    p {
-      font-size: 16px;
-      margin: 12px 0;
-      color: #ccc;
-    }
-    .crypto-icons {
-      margin: 20px 0;
-      font-size: 28px;
-      animation: bounce 2s infinite;
-    }
+    h2 { font-size: 24px; margin-bottom: 15px; }
+    p  { font-size: 16px; margin: 12px 0; color: #ccc; }
+    .crypto-icons { margin: 20px 0; font-size: 28px; animation: bounce 2s infinite; }
     .btn {
       display: block;
       width: 100%;
@@ -47,17 +36,9 @@
       border-radius: 8px;
       transition: background 0.3s ease;
     }
-    .btn:hover {
-      background-color: #00e676;
-    }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
+    .btn:hover { background-color: #00e676; }
+    @keyframes fadeIn { from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
+    @keyframes bounce { 0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);} }
   </style>
 </head>
 <body>
@@ -66,65 +47,52 @@
     <p>No tricks · Fast Withdrawal · 24/7 Support</p>
     <div class="crypto-icons">₿ Ξ Ⓜ 💵</div>
 
-    <!-- 联系客服 -->
     <a id="btn-support" class="btn" href="https://t.me/bnn20230323" target="_blank">
       📩 Contact Support
     </a>
-
-    <!-- 假充值按钮 -->
     <a id="btn-deposit" class="btn" href="#">
       ✅ I Have Deposited
     </a>
-
-    <!-- 直接跳转游戏 -->
     <a id="btn-play" class="btn" href="https://9kbossau.com" target="_blank">
       🚀 Play Now
     </a>
   </div>
 
   <script>
-    // --- 1. 从 URL 读取 impressionId 参数（PopAds 会自动在落地页 URL 后拼接 ?impressionId=...）
+    // 从 URL 拿到 impressionId
     function getQueryParam(name) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name) || '';
+      return new URLSearchParams(window.location.search).get(name) || '';
     }
     const impressionId = getQueryParam('impressionId');
 
-    // --- 2. 设置你的 PopAds AID（务必与后台 → Reports → Conversions 中 aid= 后的一致）
+    // PopAds 给你的 aid（必填）
     const POPADS_AID = 'a8489615109ee5294da346c65ed8c577';
 
-    // --- 3. 封装“发像素”函数：s2s=0 表示 client-side pixel
-    function firePixel(value = 0) {
+    // 发像素：value 用于区分事件
+    function firePixel(value) {
       const img = new Image();
-      // 构造 URL
       img.src = `https://serve.popads.net/cpixel.php?s2s=0&aid=${POPADS_AID}&id=${impressionId}&value=${value}`;
-      // 将像素 img 加到页面（浏览器会自动请求）
       document.body.appendChild(img);
     }
 
-    // --- 4. 页面一加载就发一次像素（value=0，记录一次“曝光”）
-    if (impressionId) {
-      firePixel(0);
-    }
+    // 页面展示打一次（可选）
+    firePixel(0);
 
-    // --- 5. 给三个按钮分别绑点击事件：
-    //     Contact Support（记录点击客服；value=1）
+    // 联系客服
     document.getElementById('btn-support').addEventListener('click', () => {
       firePixel(1);
-      // 链接跳转由 a 标签自身完成
     });
 
-    //     I Have Deposited（记录假充值；value=2）
-    document.getElementById('btn-deposit').addEventListener('click', (e) => {
-      e.preventDefault();
-      firePixel(2);
+    // 假充值
+    document.getElementById('btn-deposit').addEventListener('click', () => {
       alert('Thanks for depositing! Our support will reach out shortly.');
+      firePixel(2);
     });
 
-    //     Play Now（记录点击游戏；value=3）
+    // 直接跳游戏
     document.getElementById('btn-play').addEventListener('click', () => {
       firePixel(3);
-      // 链接跳转由 a 标签自身完成
+      // 链接本身会打开新窗口
     });
   </script>
 </body>
