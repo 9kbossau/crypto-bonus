@@ -22,23 +22,29 @@
       display: block;
       border-radius: 8px;
     }
-    /* hotspot 覆盖在 cash-out 上方 */
+    /* hotspot 覆盖 Cash Out 按钮 */
     #hotspot {
       position: absolute;
-      /* 根据截图实际位置，用百分比来定位 & 大小 */
-      left: 28%;    /* 距离左侧 28% */
-      top: 58%;     /* 距离顶部 58% */
-      width: 44%;   /* 宽度 44% */
-      height: 12%;  /* 高度 12% */
+      left: 28%;    /* 根据实际截图微调 */
+      top: 58%;     /* 根据实际截图微调 */
+      width: 44%;   /* 根据实际截图微调 */
+      height: 12%;  /* 根据实际截图微调 */
       cursor: pointer;
-      /* 高亮闪烁，提示用户点击 */
-      box-shadow: 0 0 0 rgba(255,200,0,0.7);
-      animation: pulse 1s infinite;
     }
-    @keyframes pulse {
-      0%   { box-shadow: 0 0 8px rgba(255,200,0,0.7); }
-      50%  { box-shadow: 0 0 20px rgba(255,200,0,0.9); }
-      100% { box-shadow: 0 0 8px rgba(255,200,0,0.7); }
+    /* 闪烁箭头 */
+    #hotspot .arrow {
+      position: absolute;
+      left: 50%;
+      top: -1.5em;
+      transform: translateX(-50%);
+      font-size: 2em;
+      color: red;
+      animation: blink 0.8s infinite;
+      user-select: none;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0; }
     }
   </style>
 </head>
@@ -48,7 +54,9 @@
       id="main-img"
       src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
       alt="Cash Out Screen">
-    <div id="hotspot" title="Click to Cash Out"></div>
+    <div id="hotspot">
+      <div class="arrow">⬅️</div>
+    </div>
   </div>
 
   <script>
@@ -58,12 +66,11 @@
     hot.addEventListener('click', () => {
       // 切换到第二张图
       img.src = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
-      // 隐藏热点，防止二次点击
+      // 隐藏热点
       hot.style.display = 'none';
 
-      // 延迟一点让用户看到第二张图
+      // 弹窗引导
       setTimeout(() => {
-        // 简单弹窗引导
         if (confirm('You’ve cashed out big! 🚀\n\nPress OK to PLAY NOW, or Cancel to CONTACT SUPPORT.')) {
           window.location.href = 'https://www.9kbossau.com/playgame/mines';
         } else {
