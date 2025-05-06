@@ -1,98 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crypto Bonus</title>
   <style>
-    * { box-sizing:border-box; margin:0; padding:0 }
-    html,body { width:100%; height:100%; overflow:hidden; background:#000 }
-    #wrapper {
-      position:relative;
-      width:100vw; height:100vh;
-    }
-    #full {
-      position:absolute;
-      top:-100vh;      /* 整个容器藏到视口上方 */
-      left:0;
-      width:100vw; 
-      height:100vh;
-      background: url('https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png') 
-                  no-repeat center center;
-      background-size: contain;  /* 保持比例，自动缩放 */
-      transition: top .5s ease-out;
-    }
-    #cashBtn {
-      position:absolute;
-      bottom:15vh; left:50%;
-      transform:translateX(-50%);
-      width:60vw; max-width:300px;
-      padding:1em; font-size:1.2em; font-weight:bold;
-      color:#000; background:gold;
-      border:none; border-radius:4px;
-      cursor:pointer;
+    body, html { margin:0; padding:0; height:100%; background:#000; display:flex; justify-content:center; align-items:center; }
+    #container { position:relative; width:100%; max-width:600px; }
+    img { display:block; width:100%; height:auto; }
+    #overlayBtn {
+      position:absolute; bottom:10%; left:50%; transform:translateX(-50%);
+      background:rgba(255,165,0,0.9); color:#000;
+      padding:15px 30px; font-size:18px; font-weight:bold;
+      border:none; border-radius:5px; cursor:pointer;
       animation:blink 1s infinite;
-      z-index:2;
     }
-    @keyframes blink {
-      0%,100% { opacity:1 }
-      50%      { opacity:.3 }
+    @keyframes blink { 50% { opacity:0.5; } }
+
+    /* 切换时黑幕过渡 */
+    #blackout {
+      display:none; position:absolute; top:0; left:0; width:100%; height:100%;
+      background:#000; z-index:5;
     }
+
     #popup {
-      position:absolute;
-      top:-100vh; left:50%;
-      transform:translateX(-50%);
-      width:90vw; max-width:320px;
-      transition: top .5s ease-out;
-      z-index:3;
+      display:none; position:absolute; top:0; left:0; width:100%; height:100%;
+      backdrop-filter:blur(4px); display:flex; justify-content:center; align-items:center; z-index:10;
     }
-    #popup .box {
-      background:#fff; padding:1em; border-radius:8px;
-      text-align:center; box-shadow:0 4px 12px rgba(0,0,0,.4);
+    #popup .dialog {
+      background:#fff; padding:20px 30px; border-radius:8px; text-align:center;
+      max-width:90%; box-shadow:0 4px 15px rgba(0,0,0,0.3);
     }
-    #popup h2 { margin-bottom:.5em; font-size:1.4em }
-    #popup p  { margin-bottom:1em }
-    #popup button {
-      margin:0 .3em; padding:.6em 1em; font-size:1em;
-      border:none; border-radius:4px; cursor:pointer;
-    }
-    #play    { background:#28a; color:#fff }
-    #support { background:#4a4; color:#fff }
+    #popup button { margin:10px; padding:10px 20px; font-size:16px; cursor:pointer; }
   </style>
 </head>
 <body>
-  <div id="wrapper">
-    <div id="full"></div>
-    <button id="cashBtn">Cash Out</button>
-    <div id="popup">
-      <div class="box">
-        <h2>Congratulations!</h2>
-        <p>You just cashed out big — ready to play more?</p>
-        <button id="play">Play Now</button>
-        <button id="support">Contact Support</button>
-      </div>
+  <div id="container">
+    <div id="blackout"></div>
+    <!-- 第一张图 -->
+    <img id="mainImage"
+         src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
+         alt="Step1">
+    <button id="overlayBtn">Cash Out</button>
+  </div>
+
+  <div id="popup">
+    <div class="dialog">
+      <h2>Congratulations!</h2>
+      <p>You just cashed out big — ready to play more?</p>
+      <button onclick="playNow()">Play Now</button>
+      <button onclick="contactSupport()">Contact Support</button>
     </div>
   </div>
 
   <script>
-    window.addEventListener('load', () => {
-      const full = document.getElementById('full');
-      const btn  = document.getElementById('cashBtn');
-      const pop  = document.getElementById('popup');
+    const btn = document.getElementById('overlayBtn');
+    const img = document.getElementById('mainImage');
+    const blackout = document.getElementById('blackout');
+    const popup = document.getElementById('popup');
 
-      btn.addEventListener('click', () => {
-        full.style.top = '0';          // 下拉全屏背景图
-        btn.style.display = 'none';    // 隐藏按钮
-        pop.style.top = '10vh';        // 弹出对话框
-      });
-
-      document.getElementById('play').onclick = () => {
-        location.href = 'https://www.9kbossau.com/playgame/mines';
-      };
-      document.getElementById('support').onclick = () => {
-        window.open('https://t.me/your_telegram_channel','_blank');
-      };
+    btn.addEventListener('click', () => {
+      // 显示黑幕
+      blackout.style.display = 'block';
+      // 隐藏按钮
+      btn.style.display = 'none';
+      // 延迟微小时间再切图
+      setTimeout(() => {
+        // 动态创建新 Image 避免预加载
+        const next = new Image();
+        next.src = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
+        next.onload = () => {
+          img.src = next.src;
+          // 隐去黑幕
+          blackout.style.display = 'none';
+          // 半秒后弹窗
+          setTimeout(() => popup.style.display = 'flex', 500);
+        };
+      }, 100);
     });
+
+    function playNow() {
+      window.location.href = 'https://www.9kbossau.com/playgame/mines';
+    }
+    function contactSupport() {
+      window.open('https://t.me/your_support_channel', '_blank');
+    }
   </script>
 </body>
 </html>
