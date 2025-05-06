@@ -2,146 +2,139 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Crypto Bonus</title>
   <style>
-    /* 全屏黑底、水平垂直居中 */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    /* 容器限制在屏幕内 */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; background: #000; }
     #container {
       position: relative;
-      width: 100%;
-      max-width: 600px;
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
     }
-    /* 图片自适应宽度 */
-    #mainImage {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    /* Cash Out 按钮 */
-    #overlayBtn {
+    .scene {
       position: absolute;
-      bottom: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #FFA500;
-      color: #000;
-      padding: 12px 24px;
-      font-size: 18px;
-      font-weight: bold;
-      border: none;
-      border-radius: 4px;
+      max-width: 100%; max-height: 100%;
+      width: auto; height: auto;
+    }
+    #scene1 { opacity: 1; transition: opacity .3s; }
+    #scene2 { opacity: 0; transition: opacity .3s; }
+
+    /* 闪烁提示按钮 */
+    #hint {
+      position: absolute;
       cursor: pointer;
-      animation: blink 1s infinite;
+      font-size: 1rem; font-weight: bold;
+      color: #fff; background: rgba(255,150,0,.8);
+      padding: .8em 1.5em; border-radius: .3em;
+      animation: blink 1s infinite alternate;
+      user-select: none;
     }
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+      from { opacity: 1; }
+      to   { opacity: 0.4; }
     }
-    /* 切图过渡遮罩 */
-    #blackout {
-      display: none;
-      position: absolute;
-      top: 0; left: 0;
+
+    /* 弹窗遮罩 */
+    #modalMask {
+      position: absolute; top: 0; left: 0;
       width: 100%; height: 100%;
-      background: #000;
-      z-index: 2;
-    }
-    /* 弹窗 */
-    #popup {
+      background: rgba(0,0,0,.6);
       display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 3;
     }
-    #popup .dialog {
-      background: #fff;
-      padding: 20px 30px;
-      border-radius: 6px;
+    /* 弹窗本体 */
+    #modal {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      background: #fff; color: #000;
+      padding: 2em; border-radius: .5em;
       text-align: center;
-      max-width: 90%;
+      max-width: 90%; width: 320px;
+      font-family: sans-serif;
+      display: none;
     }
-    #popup h2 { margin-top:0; }
-    #popup button {
-      margin: 10px 8px;
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+    #modal h2 { margin-bottom: .5em; }
+    #modal p  { margin-bottom: 1.5em; }
+    #modal button {
+      margin: 0 .5em;
+      padding: .6em 1.2em;
+      border: none; border-radius: .3em;
+      font-size: .9rem; cursor: pointer;
     }
-    #popup .play { background: #3498db; color: #fff; }
-    #popup .support { background: #27ae60; color: #fff; }
+    #playBtn { background: #28a; color: #fff; }
+    #supportBtn { background: #3a3; color: #fff; }
   </style>
 </head>
 <body>
-  <div id="container">
-    <!-- 切图过渡黑幕 -->
-    <div id="blackout"></div>
-    <!-- 第一张图 -->
-    <img id="mainImage"
-         src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/main/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
-         alt="Step 1">
-    <!-- 闪烁按钮 -->
-    <button id="overlayBtn">Cash Out</button>
-  </div>
+
+<div id="container">
+  <!-- 场景 1：初始图 + 闪烁提示 -->
+  <img id="scene1" class="scene"
+       src="first.png"
+       alt="Initial Scene">
+  <div id="hint">Click Cash Out</div>
+
+  <!-- 场景 2：赚到钱图 -->
+  <img id="scene2" class="scene"
+       src="second.png"
+       alt="You Cashed Out Big">
 
   <!-- 弹窗 -->
-  <div id="popup">
-    <div class="dialog">
-      <h2>Congratulations!</h2>
-      <p>You just cashed out big — ready to play more?</p>
-      <button class="play" onclick="playNow()">Play Now</button>
-      <button class="support" onclick="contactSupport()">Contact Support</button>
-    </div>
+  <div id="modalMask"></div>
+  <div id="modal">
+    <h2>Congratulations!</h2>
+    <p>You just cashed out big — ready to play more?</p>
+    <button id="playBtn">Withdraw</button>
+    <button id="supportBtn">Contact Support</button>
   </div>
+</div>
 
-  <script>
-    const btn = document.getElementById('overlayBtn');
-    const img = document.getElementById('mainImage');
-    const blackout = document.getElementById('blackout');
-    const popup = document.getElementById('popup');
+<script>
+  const hint = document.getElementById('hint');
+  const scene1 = document.getElementById('scene1');
+  const scene2 = document.getElementById('scene2');
+  const mask = document.getElementById('modalMask');
+  const modal = document.getElementById('modal');
+  const playBtn = document.getElementById('playBtn');
+  const supportBtn = document.getElementById('supportBtn');
 
-    btn.addEventListener('click', () => {
-      // 隐藏按钮，显示黑幕
-      btn.style.display = 'none';
-      blackout.style.display = 'block';
+  // 把 hint 定位到“Cash Out”按钮上
+  function positionHint() {
+    const btnRect = scene1.getBoundingClientRect();
+    // 这里假设“Cash Out”按钮在图片中的相对位置固定
+    // 根据你的图片实际情况调整 offset
+    const offsetX = btnRect.width * 0.15;
+    const offsetY = btnRect.height * 0.75;
+    hint.style.top  = `${btnRect.top + offsetY}px`;
+    hint.style.left = `${btnRect.left + offsetX}px`;
+  }
+  window.addEventListener('resize', positionHint);
+  window.addEventListener('load', positionHint);
 
-      // 等100ms再加载第二张
-      setTimeout(() => {
-        const nextImg = new Image();
-        nextImg.src = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/main/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
-        nextImg.onload = () => {
-          img.src = nextImg.src;
-          blackout.style.display = 'none';
-          // 半秒后弹窗
-          setTimeout(() => {
-            popup.style.display = 'flex';
-          }, 500);
-        };
-      }, 100);
-    });
+  // 点击 hint 时，切到第二场景
+  hint.addEventListener('click', () => {
+    // 隐藏场景1和提示
+    scene1.style.opacity = 0;
+    hint.style.display = 'none';
+    // 显示场景2
+    scene2.style.opacity = 1;
 
-    function playNow() {
-      window.location.href = 'https://www.9kbossau.com/playgame/mines';
-    }
-    function contactSupport() {
-      window.open('https://t.me/your_support_channel', '_blank');
-    }
-  </script>
+    // 延迟1秒再弹窗
+    setTimeout(() => {
+      mask.style.display = 'block';
+      modal.style.display = 'block';
+    }, 1000);
+  });
+
+  // “Withdraw” → 跳到游戏
+  playBtn.onclick = () => {
+    window.location.href = 'https://www.9kbossau.com/playgame/mines';
+  };
+  // “Contact Support” → 打开客服
+  supportBtn.onclick = () => {
+    window.open('https://t.me/YourSupportChannel', '_blank');
+  };
+</script>
+
 </body>
 </html>
