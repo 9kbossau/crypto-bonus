@@ -2,130 +2,111 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🎉 Deposit 10 USDT → Get 15 USDT!</title>
+  <title>9kBOSS 动画演示</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      background: #0f0f0f;
-      font-family: 'Segoe UI', sans-serif;
+      background: #000;
       color: #fff;
       text-align: center;
-      padding: 40px 20px;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
     }
-    .container {
-      background: #1e1e1e;
-      padding: 30px;
-      max-width: 420px;
-      margin: auto;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0, 255, 128, 0.3);
-      animation: fadeIn 1.2s ease-out;
+    #wrap {
+      position: relative;
+      max-width: 400px;
+      margin: 50px auto;
     }
-    h2 {
-      font-size: 24px;
-      margin-bottom: 15px;
-    }
-    p {
-      font-size: 16px;
-      margin: 12px 0;
-      color: #ccc;
-    }
-    .crypto-icons {
-      margin: 20px 0;
-      font-size: 28px;
-      animation: bounce 2s infinite;
-    }
-    .btn {
-      display: block;
+    #demo-img {
       width: 100%;
-      margin: 10px 0;
-      padding: 14px;
-      background-color: #00c853;
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
       border-radius: 8px;
-      transition: background 0.3s ease;
     }
-    .btn:hover {
-      background-color: #00e676;
+    #cash-btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 12px 24px;
+      background: #f90;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to   {opacity: 1; transform: translateY(0);}
+    /* 弹窗样式 */
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.75);
+      justify-content: center;
+      align-items: center;
     }
-    @keyframes bounce {
-      0%,100% {transform: translateY(0);}
-      50%     {transform: translateY(-5px);}
+    #modal .box {
+      background: #111;
+      padding: 24px;
+      border-radius: 8px;
+      max-width: 320px;
     }
+    #modal .box button {
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #play-btn { background: #0c0; color: #fff; }
+    #support-btn { background: #09f; color: #fff; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>🎉 Deposit 10 USDT → Get 15 USDT!</h2>
-    <p>No tricks · Fast Withdrawal · 24/7 Support</p>
-    <div class="crypto-icons">₿ Ξ Ⓜ 💵</div>
-
-    <!-- 联系客服 -->
-    <a id="btn-support" class="btn" href="https://t.me/bnn20230323" target="_blank">
-      📩 Contact Support
-    </a>
-
-    <!-- 假充值按钮 -->
-    <a id="btn-deposit" class="btn" href="#">
-      ✅ I Have Deposited
-    </a>
-
-    <!-- 直接跳转游戏 -->
-    <a id="btn-play" class="btn" href="#">
-      🚀 Play Now
-    </a>
+  <div id="wrap">
+    <!-- 第一张截图 -->
+    <img id="demo-img"
+         src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
+         alt="Game Screen 1">
+    <button id="cash-btn">Cash Out</button>
   </div>
 
-  <!-- ===== PopAds 客户端像素 & 事件脚本 ===== -->
+  <!-- 引导弹窗 -->
+  <div id="modal">
+    <div class="box">
+      <h3>🎉 恭喜您获得收益！</h3>
+      <button id="play-btn">🚀 立即注册并充值游戏</button>
+      <button id="support-btn">💬 联系 Telegram 客服</button>
+    </div>
+  </div>
+
   <script>
-    // 1. 取 URL 上的 impressionId 参数
-    function getQueryParam(name) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name) || '';
-    }
-    const impressionId = getQueryParam('impressionId');
+    // 第二张截图地址
+    const secondImgURL = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
 
-    // 2. 你的 PopAds 帐号 Aid （务必和后台一致）
-    const POPADS_AID = 'a8489615109ee5294da346c65ed8c577';
+    const imgEl      = document.getElementById('demo-img');
+    const cashBtn    = document.getElementById('cash-btn');
+    const modal      = document.getElementById('modal');
+    const playBtn    = document.getElementById('play-btn');
+    const supportBtn = document.getElementById('support-btn');
 
-    // 3. 发送 Pixel 请求
-    function firePixel(value = 0) {
-      const img = new Image();
-      img.src = `https://serve.popads.net/cpixel.php?s2s=0&aid=${POPADS_AID}&id=${impressionId}&value=${value}`;
-      document.body.appendChild(img);
-    }
+    cashBtn.addEventListener('click', () => {
+      // 切换到第二张图
+      imgEl.src = secondImgURL;
 
-    // 4. 页面加载时：曝光 (value=0)
-    firePixel(0);
+      // 0.8 秒后弹出引导弹窗
+      setTimeout(() => {
+        modal.style.display = 'flex';
+      }, 800);
+    });
 
-    // 5. 点击「联系客服」(value=3)
-    document.getElementById('btn-support')
-      .addEventListener('click', () => firePixel(3));
-
-    // 6. 点击「I Have Deposited」(value=1)
-    document.getElementById('btn-deposit')
-      .addEventListener('click', e => {
-        e.preventDefault();
-        alert('Thanks for depositing! Our support will reach out shortly.');
-        firePixel(1);
-      });
-
-    // 7. 点击「Play Now」(value=2)
-    document.getElementById('btn-play')
-      .addEventListener('click', e => {
-        e.preventDefault();
-        firePixel(2);
-        // 再打开游戏链接
-        window.open('https://9kbossau.com', '_blank');
-      });
+    // “立即注册并充值游戏”按钮
+    playBtn.addEventListener('click', () => {
+      window.location.href = 'https://yourgame.example.com/signup';  // 填你的游戏注册链接
+    });
+    // “联系 Telegram 客服”按钮
+    supportBtn.addEventListener('click', () => {
+      window.open('https://t.me/bnn20230323', '_blank');
+    });
   </script>
-  <!-- ===== 脚本结束 ===== -->
-
 </body>
 </html>
