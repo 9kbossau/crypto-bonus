@@ -2,129 +2,82 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🤑 Cash Out Animation</title>
+  <title>🎉 Deposit 10 USDT → Get 15 USDT!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      background: #000;
-      color: #fff;
-      text-align: center;
-      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
+      background: #0f0f0f;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      text-align: center;
     }
+
+    /* 整个弹框区域 */
     #container {
       position: relative;
-      max-width: 400px;
-      margin: 60px auto;
-    }
-    #main-img {
       width: 100%;
+      max-width: 640px;      /* 最大宽度 640px，超过则保持 */
+      margin: 20px auto;     /* 居中并留白 */
+    }
+
+    /* 主图响应式 */
+    #main-img {
+      display: block;
+      width: 100%;
+      height: auto;
       border-radius: 8px;
     }
+
+    /* Cash Out 按钮 */
     #cash-btn {
       position: absolute;
-      bottom: 16px;
+      bottom: 8%;
       left: 50%;
       transform: translateX(-50%);
-      padding: 12px 24px;
+      padding: 14px 28px;
+      font-size: 1.2rem;
+      font-weight: bold;
       background: #ffcc00;
       color: #000;
-      font-weight: bold;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
       animation: pulse 1s infinite;
     }
+
     @keyframes pulse {
       0%   { box-shadow: 0 0 8px #ffcc00; }
       50%  { box-shadow: 0 0 20px #ffcc00; }
       100% { box-shadow: 0 0 8px #ffcc00; }
     }
-
-    /* Modal */
-    #modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    #modal .dialog {
-      background: #111;
-      padding: 24px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 320px;
-    }
-    #modal h2 {
-      margin-top: 0;
-      font-size: 20px;
-      color: #ffcc00;
-    }
-    #modal button {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      font-size: 16px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    #start-game { background: #0f0; color: #fff; }
-    #contact-support { background: #09f; color: #fff; }
   </style>
 </head>
 <body>
-
   <div id="container">
-    <!-- 第一张图 -->
-    <img id="main-img"
-         src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
-         alt="Cash Out Screen">
+    <img
+      id="main-img"
+      src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
+      alt="Cash Out Screen">
     <button id="cash-btn">CASH OUT</button>
   </div>
 
-  <!-- 弹窗 -->
-  <div id="modal">
-    <div class="dialog">
-      <h2>Congratulations! 🎉</h2>
-      <p>You just cashed out big! What’s next?</p>
-      <button id="start-game">START PLAYING NOW</button>
-      <button id="contact-support">CONTACT SUPPORT</button>
-    </div>
-  </div>
-
   <script>
-    const firstImg = document.getElementById('main-img');
-    const cashBtn = document.getElementById('cash-btn');
-    const modal = document.getElementById('modal');
-    const startBtn = document.getElementById('start-game');
-    const supportBtn = document.getElementById('contact-support');
-
-    // 第二张图地址
-    const secondImgURL = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
-
-    cashBtn.addEventListener('click', () => {
-      // 切换图片
-      firstImg.src = secondImgURL;
-      // 隐藏闪烁按钮
-      cashBtn.style.display = 'none';
-      // 0.8s 后弹窗
-      setTimeout(() => modal.style.display = 'flex', 800);
-    });
-
-    // “开始游戏”
-    startBtn.addEventListener('click', () => {
-      window.location.href = 'https://www.9kbossau.com/playgame/mines';
-    });
-    // “联系客服”
-    supportBtn.addEventListener('click', () => {
-      window.open('https://t.me/bnn20230323', '_blank');
+    const btn = document.getElementById('cash-btn');
+    btn.addEventListener('click', () => {
+      // 切换到第二张图
+      document.getElementById('main-img').src = 
+        'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
+      // 弹出下一步选择
+      setTimeout(() => {
+        if (confirm('Ready to play now? Click OK to start the game, or Cancel to contact support.')) {
+          window.location.href = 'https://www.9kbossau.com/playgame/mines';
+        } else {
+          window.open('https://t.me/bnn20230323', '_blank');
+        }
+      }, 200);
     });
   </script>
-
 </body>
 </html>
