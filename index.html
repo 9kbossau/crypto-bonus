@@ -2,55 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🎉 Deposit 10 USDT → Get 15 USDT!</title>
+  <title>Interactive Cash-Out Demo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #0f0f0f;
-      font-family: 'Segoe UI', sans-serif;
-      color: #fff;
-      text-align: center;
+    body, html {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      display: flex; justify-content: center; align-items: center;
+      background: #111;
     }
-
-    /* 整个弹框区域 */
     #container {
       position: relative;
-      width: 100%;
-      max-width: 640px;      /* 最大宽度 640px，超过则保持 */
-      margin: 20px auto;     /* 居中并留白 */
+      width: 90vw;
+      max-width: 800px;
     }
-
-    /* 主图响应式 */
     #main-img {
-      display: block;
       width: 100%;
       height: auto;
+      display: block;
       border-radius: 8px;
     }
-
-    /* Cash Out 按钮 */
-    #cash-btn {
+    /* hotspot 覆盖在 cash-out 上方 */
+    #hotspot {
       position: absolute;
-      bottom: 8%;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 14px 28px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      background: #ffcc00;
-      color: #000;
-      border: none;
-      border-radius: 6px;
+      /* 根据截图实际位置，用百分比来定位 & 大小 */
+      left: 28%;    /* 距离左侧 28% */
+      top: 58%;     /* 距离顶部 58% */
+      width: 44%;   /* 宽度 44% */
+      height: 12%;  /* 高度 12% */
       cursor: pointer;
+      /* 高亮闪烁，提示用户点击 */
+      box-shadow: 0 0 0 rgba(255,200,0,0.7);
       animation: pulse 1s infinite;
     }
-
     @keyframes pulse {
-      0%   { box-shadow: 0 0 8px #ffcc00; }
-      50%  { box-shadow: 0 0 20px #ffcc00; }
-      100% { box-shadow: 0 0 8px #ffcc00; }
+      0%   { box-shadow: 0 0 8px rgba(255,200,0,0.7); }
+      50%  { box-shadow: 0 0 20px rgba(255,200,0,0.9); }
+      100% { box-shadow: 0 0 8px rgba(255,200,0,0.7); }
     }
   </style>
 </head>
@@ -60,18 +48,23 @@
       id="main-img"
       src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
       alt="Cash Out Screen">
-    <button id="cash-btn">CASH OUT</button>
+    <div id="hotspot" title="Click to Cash Out"></div>
   </div>
 
   <script>
-    const btn = document.getElementById('cash-btn');
-    btn.addEventListener('click', () => {
+    const img = document.getElementById('main-img');
+    const hot = document.getElementById('hotspot');
+
+    hot.addEventListener('click', () => {
       // 切换到第二张图
-      document.getElementById('main-img').src = 
-        'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
-      // 弹出下一步选择
+      img.src = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
+      // 隐藏热点，防止二次点击
+      hot.style.display = 'none';
+
+      // 延迟一点让用户看到第二张图
       setTimeout(() => {
-        if (confirm('Ready to play now? Click OK to start the game, or Cancel to contact support.')) {
+        // 简单弹窗引导
+        if (confirm('You’ve cashed out big! 🚀\n\nPress OK to PLAY NOW, or Cancel to CONTACT SUPPORT.')) {
           window.location.href = 'https://www.9kbossau.com/playgame/mines';
         } else {
           window.open('https://t.me/bnn20230323', '_blank');
