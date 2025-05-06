@@ -1,104 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Crypto Bonus</title>
-  <style>
-    html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:#000; }
-    #container { position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
-    .scene {
-      position:absolute; top:0; left:0;
-      width:100%; height:100%;
-      background-size:cover;
-      background-position:center center;
-    }
-    #scene1 { background-image:url('https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png'); }
-    #scene2 { 
-      background-image:url('https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png');
-      display:none;
-    }
+<style>
+  /* 去掉原来 bottom:center 的 tip */
+  #tip {
+    position: absolute;
+    /* 初始隐藏，等 JS 计算完成后再显示 */
+    opacity: 0;
+    padding: 0.3em 0.6em;
+    background: rgba(255,255,255,0.9);
+    color: #000;
+    font-size: 1.5vw;
+    font-weight: bold;
+    border-radius: 4px;
+    pointer-events: auto;
+    animation: blink 1s infinite;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity .3s;
+  }
+</style>
 
-    /* 闪烁的 Cash Out 提示 */
-    #tip {
-      position:absolute;
-      bottom:10%; left:50%;
-      transform:translateX(-50%);
-      padding: 0.5em 1em;
-      background: rgba(255,255,255,0.8);
-      color: #000;
-      font-size:2vw;
-      font-weight:bold;
-      border-radius:5px;
-      animation: blink 1s infinite;
-      cursor:pointer;
-    }
-    @keyframes blink {
-      0%,50%,100% { opacity:1; }
-      25%,75% { opacity:0; }
-    }
-
-    /* 弹窗按钮 */
-    #popup {
-      position:absolute;
-      top:50%; left:50%;
-      transform:translate(-50%,-50%);
-      background:rgba(0,0,0,0.8);
-      padding:2em;
-      border-radius:10px;
-      text-align:center;
-      display:none;
-    }
-    #popup button {
-      margin:0.5em;
-      padding:0.5em 1em;
-      font-size:1.5vw;
-      border:none;
-      border-radius:5px;
-      cursor:pointer;
-    }
-    #playBtn { background:#28a745; color:#fff; }
-    #supportBtn { background:#17a2b8; color:#fff; }
-  </style>
-</head>
 <body>
   <div id="container">
-    <div id="scene1" class="scene"></div>
-    <div id="scene2" class="scene"></div>
-
+    <!-- ... 场景一、二 和 popup 保持不变 ... -->
     <div id="tip">Click “Cash Out”!</div>
-
-    <div id="popup">
-      <p style="color:#fff; font-size:2vw; margin-bottom:1em;">You’ve cashed out big! What do you want to do next?</p>
-      <button id="playBtn">Start Playing</button>
-      <button id="supportBtn">Contact Support</button>
-    </div>
   </div>
 
   <script>
-    const tip = document.getElementById('tip');
-    const scene1 = document.getElementById('scene1');
-    const scene2 = document.getElementById('scene2');
-    const popup = document.getElementById('popup');
-    const playBtn = document.getElementById('playBtn');
-    const supportBtn = document.getElementById('supportBtn');
+    const tip       = document.getElementById('tip');
+    const scene1    = document.getElementById('scene1');
+    const scene2    = document.getElementById('scene2');
+    const popup     = document.getElementById('popup');
+    // **找出“Cash Out”这个真按钮（scene1 内）**
+    const realBtn   = new Image();
+    realBtn.src     = ''; // 不实际加载，只为取得 DOMRange
+    // 但我们要用 querySelector 找到那张背景上模拟 Cash Out 的按钮区域：
+    // 这里假设场景一的背景里，这个 Cash Out 按钮正好在画面中一个固定比例的位置：
+    // 我们反而在页面顶部加一个透明的“热点”div，覆盖到那个区域。
+    const hotspot = document.createElement('div');
+    hotspot.style.position = 'absolute';
+    // 以下数值需要根据你图片里的按钮位置微调：
+    hotspot.style.left   = '28%';   // 距离左边 28%
+    hotspot.style.top    = '60%';   // 距离顶部 60%
+    hotspot.style.width  = '20%';   // 宽度约占 20%
+    hotspot.style.height = '10%';   // 高度约占 10%
+    hotspot.style.cursor = 'pointer';
+    hotspot.style.background = 'transparent';
+    document.getElementById('container').appendChild(hotspot);
 
-    // 点击提示区域（模拟点击“Cash Out”）
-    tip.addEventListener('click', () => {
-      scene1.style.display = 'none';
-      tip.style.display = 'none';
-      scene2.style.display = 'block';
-      // 延迟弹窗显示，给用户一个“惊喜”感
-      setTimeout(() => popup.style.display = 'block', 300);
+    // 图片加载完毕后，再显示 tip 并对齐到 hotspot
+    window.addEventListener('load', () => {
+      const hr = hotspot.getBoundingClientRect();
+      tip.style.left   = (hr.left + hr.width/2) + 'px';
+      tip.style.top    = (hr.top  + hr.height/2) + 'px';
+      tip.style.transform = 'translate(-50%,-50%)';
+      tip.style.opacity   = 1;
     });
 
-    // 按钮跳转
-    playBtn.addEventListener('click', () => {
+    // 点击“热点”或 tip 都算“Cash Out”
+    function onCashOut() {
+      scene1.style.display = 'none';
+      tip.style.display    = 'none';
+      hotspot.style.display= 'none';
+      scene2.style.display = 'block';
+      setTimeout(() => popup.style.display = 'block', 300);
+    }
+    hotspot.addEventListener('click', onCashOut);
+    tip.addEventListener    ('click', onCashOut);
+
+    // popup 按钮的逻辑不变...
+    document.getElementById('playBtn').addEventListener('click', () => {
       window.location.href = 'https://www.9kbossau.com/playgame/mines';
     });
-    supportBtn.addEventListener('click', () => {
-      // 如果你想打开 Telegram 频道：
+    document.getElementById('supportBtn').addEventListener('click', () => {
       window.open('https://t.me/your_telegram_channel', '_blank');
     });
   </script>
 </body>
-</html>
