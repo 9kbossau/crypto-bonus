@@ -5,135 +5,105 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Crypto Bonus</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; background: #000; }
-    #container {
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+    #app {
       position: relative;
       width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
+      background: black center/cover no-repeat
+        url('first.jpg');
+      transition: background-image .3s ease-in-out;
     }
-    .scene {
-      position: absolute;
-      max-width: 100%; max-height: 100%;
-      width: auto; height: auto;
-    }
-    #scene1 { opacity: 1; transition: opacity .3s; }
-    #scene2 { opacity: 0; transition: opacity .3s; }
 
     /* 闪烁提示按钮 */
-    #hint {
+    #hintBtn {
       position: absolute;
+      /* 这里根据你图中按钮的大致位置微调 */
+      top: 75%; left: 20%;
+      transform: translate(-50%,-50%);
+      padding: .8em 1.5em;
+      background: rgba(255,165,0, .9);
+      color: #fff; font-size: 1em; font-weight: bold;
+      border: none; border-radius: .3em;
       cursor: pointer;
-      font-size: 1rem; font-weight: bold;
-      color: #fff; background: rgba(255,150,0,.8);
-      padding: .8em 1.5em; border-radius: .3em;
       animation: blink 1s infinite alternate;
-      user-select: none;
     }
     @keyframes blink {
       from { opacity: 1; }
-      to   { opacity: 0.4; }
+      to   { opacity: 0.3; }
     }
 
-    /* 弹窗遮罩 */
-    #modalMask {
+    /* 遮罩 & 弹窗 */
+    #mask {
       position: absolute; top: 0; left: 0;
       width: 100%; height: 100%;
       background: rgba(0,0,0,.6);
       display: none;
     }
-    /* 弹窗本体 */
-    #modal {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
+    #dialog {
+      position: absolute;
+      top: 10px; left: 50%;
+      transform: translateX(-50%);
       background: #fff; color: #000;
-      padding: 2em; border-radius: .5em;
+      padding: 1.5em 2em;
+      border-radius: .5em;
       text-align: center;
-      max-width: 90%; width: 320px;
-      font-family: sans-serif;
+      max-width: 90%;
       display: none;
+      box-shadow: 0 0 .8em rgba(0,0,0,.3);
     }
-    #modal h2 { margin-bottom: .5em; }
-    #modal p  { margin-bottom: 1.5em; }
-    #modal button {
-      margin: 0 .5em;
-      padding: .6em 1.2em;
+    #dialog h2 { margin-bottom: .5em; }
+    #dialog p  { margin-bottom: 1em; }
+    #dialog button {
+      margin: 0 .5em; padding: .5em 1em;
       border: none; border-radius: .3em;
-      font-size: .9rem; cursor: pointer;
+      font-size: .9em; cursor: pointer;
     }
-    #playBtn { background: #28a; color: #fff; }
-    #supportBtn { background: #3a3; color: #fff; }
+    #play { background: #28a; color: #fff; }
+    #support { background: #3a3; color: #fff; }
   </style>
 </head>
 <body>
 
-<div id="container">
-  <!-- 场景 1：初始图 + 闪烁提示 -->
-  <img id="scene1" class="scene"
-       src="first.png"
-       alt="Initial Scene">
-  <div id="hint">Click Cash Out</div>
+<div id="app">
+  <button id="hintBtn">Click Cash Out</button>
 
-  <!-- 场景 2：赚到钱图 -->
-  <img id="scene2" class="scene"
-       src="second.png"
-       alt="You Cashed Out Big">
-
-  <!-- 弹窗 -->
-  <div id="modalMask"></div>
-  <div id="modal">
+  <!-- 弹窗遮罩和对话框 -->
+  <div id="mask"></div>
+  <div id="dialog">
     <h2>Congratulations!</h2>
     <p>You just cashed out big — ready to play more?</p>
-    <button id="playBtn">Withdraw</button>
-    <button id="supportBtn">Contact Support</button>
+    <button id="play">Withdraw</button>
+    <button id="support">Contact Support</button>
   </div>
 </div>
 
 <script>
-  const hint = document.getElementById('hint');
-  const scene1 = document.getElementById('scene1');
-  const scene2 = document.getElementById('scene2');
-  const mask = document.getElementById('modalMask');
-  const modal = document.getElementById('modal');
-  const playBtn = document.getElementById('playBtn');
-  const supportBtn = document.getElementById('supportBtn');
+  const app    = document.getElementById('app');
+  const hint   = document.getElementById('hintBtn');
+  const mask   = document.getElementById('mask');
+  const dialog = document.getElementById('dialog');
+  const play   = document.getElementById('play');
+  const support= document.getElementById('support');
 
-  // 把 hint 定位到“Cash Out”按钮上
-  function positionHint() {
-    const btnRect = scene1.getBoundingClientRect();
-    // 这里假设“Cash Out”按钮在图片中的相对位置固定
-    // 根据你的图片实际情况调整 offset
-    const offsetX = btnRect.width * 0.15;
-    const offsetY = btnRect.height * 0.75;
-    hint.style.top  = `${btnRect.top + offsetY}px`;
-    hint.style.left = `${btnRect.left + offsetX}px`;
-  }
-  window.addEventListener('resize', positionHint);
-  window.addEventListener('load', positionHint);
-
-  // 点击 hint 时，切到第二场景
-  hint.addEventListener('click', () => {
-    // 隐藏场景1和提示
-    scene1.style.opacity = 0;
+  hint.onclick = () => {
+    // 切背景
+    app.style.backgroundImage = "url('second.jpg')";
+    // 隐藏提示
     hint.style.display = 'none';
-    // 显示场景2
-    scene2.style.opacity = 1;
-
-    // 延迟1秒再弹窗
+    // 1秒后弹窗
     setTimeout(() => {
-      mask.style.display = 'block';
-      modal.style.display = 'block';
+      mask.style.display = dialog.style.display = 'block';
     }, 1000);
-  });
+  };
 
-  // “Withdraw” → 跳到游戏
-  playBtn.onclick = () => {
-    window.location.href = 'https://www.9kbossau.com/playgame/mines';
-  };
-  // “Contact Support” → 打开客服
-  supportBtn.onclick = () => {
-    window.open('https://t.me/YourSupportChannel', '_blank');
-  };
+  // 按钮跳转
+  play.onclick = () => window.location.href = 'https://www.9kbossau.com/playgame/mines';
+  support.onclick = () => window.open('https://t.me/YourSupportChannel', '_blank');
 </script>
 
 </body>
