@@ -1,55 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Crypto Bonus</title>
   <style>
-    body, html { margin:0; padding:0; height:100%; background:#000; display:flex; justify-content:center; align-items:center; }
-    #container { position:relative; width:100%; max-width:600px; }
-    img { display:block; width:100%; height:auto; }
+    /* 全屏黑底、水平垂直居中 */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    /* 容器限制在屏幕内 */
+    #container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+    }
+    /* 图片自适应宽度 */
+    #mainImage {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    /* Cash Out 按钮 */
     #overlayBtn {
-      position:absolute; bottom:10%; left:50%; transform:translateX(-50%);
-      background:rgba(255,165,0,0.9); color:#000;
-      padding:15px 30px; font-size:18px; font-weight:bold;
-      border:none; border-radius:5px; cursor:pointer;
-      animation:blink 1s infinite;
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #FFA500;
+      color: #000;
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      animation: blink 1s infinite;
     }
-    @keyframes blink { 50% { opacity:0.5; } }
-
-    /* 切换时黑幕过渡 */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    /* 切图过渡遮罩 */
     #blackout {
-      display:none; position:absolute; top:0; left:0; width:100%; height:100%;
-      background:#000; z-index:5;
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      z-index: 2;
     }
-
+    /* 弹窗 */
     #popup {
-      display:none; position:absolute; top:0; left:0; width:100%; height:100%;
-      backdrop-filter:blur(4px); display:flex; justify-content:center; align-items:center; z-index:10;
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
     }
     #popup .dialog {
-      background:#fff; padding:20px 30px; border-radius:8px; text-align:center;
-      max-width:90%; box-shadow:0 4px 15px rgba(0,0,0,0.3);
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 6px;
+      text-align: center;
+      max-width: 90%;
     }
-    #popup button { margin:10px; padding:10px 20px; font-size:16px; cursor:pointer; }
+    #popup h2 { margin-top:0; }
+    #popup button {
+      margin: 10px 8px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #popup .play { background: #3498db; color: #fff; }
+    #popup .support { background: #27ae60; color: #fff; }
   </style>
 </head>
 <body>
   <div id="container">
+    <!-- 切图过渡黑幕 -->
     <div id="blackout"></div>
     <!-- 第一张图 -->
     <img id="mainImage"
-         src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
-         alt="Step1">
+         src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/main/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
+         alt="Step 1">
+    <!-- 闪烁按钮 -->
     <button id="overlayBtn">Cash Out</button>
   </div>
 
+  <!-- 弹窗 -->
   <div id="popup">
     <div class="dialog">
       <h2>Congratulations!</h2>
       <p>You just cashed out big — ready to play more?</p>
-      <button onclick="playNow()">Play Now</button>
-      <button onclick="contactSupport()">Contact Support</button>
+      <button class="play" onclick="playNow()">Play Now</button>
+      <button class="support" onclick="contactSupport()">Contact Support</button>
     </div>
   </div>
 
@@ -60,21 +117,21 @@
     const popup = document.getElementById('popup');
 
     btn.addEventListener('click', () => {
-      // 显示黑幕
-      blackout.style.display = 'block';
-      // 隐藏按钮
+      // 隐藏按钮，显示黑幕
       btn.style.display = 'none';
-      // 延迟微小时间再切图
+      blackout.style.display = 'block';
+
+      // 等100ms再加载第二张
       setTimeout(() => {
-        // 动态创建新 Image 避免预加载
-        const next = new Image();
-        next.src = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
-        next.onload = () => {
-          img.src = next.src;
-          // 隐去黑幕
+        const nextImg = new Image();
+        nextImg.src = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/main/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
+        nextImg.onload = () => {
+          img.src = nextImg.src;
           blackout.style.display = 'none';
           // 半秒后弹窗
-          setTimeout(() => popup.style.display = 'flex', 500);
+          setTimeout(() => {
+            popup.style.display = 'flex';
+          }, 500);
         };
       }, 100);
     });
