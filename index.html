@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <title>Crypto Bonus</title>
   <style>
-    * { box-sizing: border-box; margin:0; padding:0 }
+    * { box-sizing: border-box; margin: 0; padding: 0 }
     html, body {
-      width:100%; height:100%;
+      width: 100%; height: 100%;
       background: #000;
       display: flex; justify-content: center; align-items: center;
     }
@@ -42,40 +42,47 @@
     }
     #popup {
       position: absolute;
-      bottom: -120px;      /* 弹窗放到容器下面 */
+      top: 0;
       left: 50%;
-      transform: translateX(-50%);
-      width: 80%;
-      background: rgba(0,0,0,0.6);
-      padding-top: 120px;  /* 让遮罩只盖图片下方 */
-      display: none;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      z-index: 1;          /* z-index 1，比图片低 */
+      transform: translateX(-50%) translateY(-100%);
+      width: auto;
+      padding: 1em 0;
+      transition: transform 0.3s ease-out;
+      z-index: 3;
+    }
+    #popup.visible {
+      transform: translateX(-50%) translateY(0);
     }
     #popup .box {
-      background:#fff; padding:1.5em; border-radius:8px;
-      text-align:center; width: 100%;
-      max-width:400px;
+      background: #fff;
+      padding: 1.2em 2em;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
+    #popup h2 { margin-bottom: 0.5em; }
+    #popup p  { margin-bottom: 1em; }
     #popup button {
-      margin:0.5em;
-      padding:0.6em 1.2em;
-      font-size:1em;
-      cursor:pointer;
-      border:none;
-      border-radius:4px;
+      margin: 0 0.5em;
+      padding: 0.6em 1.2em;
+      font-size: 1em;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
     }
-    #play    { background:#28a; color:#fff }
-    #support { background:#4a4; color:#fff }
+    #play    { background: #28a; color: #fff }
+    #support { background: #4a4; color: #fff }
   </style>
 </head>
 <body>
   <div id="container">
+    <!-- 第一步大图 -->
     <img id="img1" src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png" alt="Step 1"/>
+    <!-- 第二步大图（先隐藏） -->
     <img id="img2" style="display:none; position: relative; z-index:1" src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png" alt="Step 2"/>
+    <!-- 闪烁按钮 -->
     <button id="cashBtn">Cash Out</button>
+    <!-- 弹窗（初始隐藏，上滑入场） -->
     <div id="popup">
       <div class="box">
         <h2>Congratulations!</h2>
@@ -94,18 +101,20 @@
       const popup = document.getElementById('popup');
 
       btn.addEventListener('click', () => {
-        img1.style.display = 'none';
-        btn.style.display  = 'none';
-        img2.style.display = 'block';
-        popup.style.display = 'flex';
+        // 切图、隐藏按钮
+        img1.style.display  = 'none';
+        btn.style.display   = 'none';
+        img2.style.display  = 'block';
+        // 弹窗滑入
+        popup.classList.add('visible');
       });
 
-      document.getElementById('play').addEventListener('click', () => {
-        window.location.href = 'https://www.9kbossau.com/playgame/mines';
-      });
-      document.getElementById('support').addEventListener('click', () => {
+      document.getElementById('play').onclick = () => {
+        location.href = 'https://www.9kbossau.com/playgame/mines';
+      };
+      document.getElementById('support').onclick = () => {
         window.open('https://t.me/your_telegram_channel', '_blank');
-      });
+      };
     });
   </script>
 </body>
