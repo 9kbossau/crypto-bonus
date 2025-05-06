@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Crypto Bonus</title>
   <style>
     * { box-sizing: border-box; margin:0; padding:0 }
@@ -11,87 +12,72 @@
       overflow:hidden;
     }
     #wrapper {
-      position: relative;
-      width:100vw;
-      height:100vh;
-      overflow: hidden;
+      position:relative;
+      width:100vw; height:100vh;
     }
     #full {
-      position: absolute;
-      top: -15vh; /* 先往上移出视口，隐藏顶部导航 */
-      left: 0;
-      width: 100%;
-      transition: top 0.5s ease-out;
+      position:absolute;
+      top:-100%; /* 先整张图往上藏满屏 */
+      left:0;
+      width:100vw;
+      transition: top .5s ease-out;
     }
-    /* 保证图片在屏幕内横向自适应 */
     #full img {
-      width:100%;
-      height:auto;
       display:block;
+      width:100%; height:auto;
     }
-
-    /* 闪烁按钮 */
     #cashBtn {
-      position: absolute;
-      bottom: 12%;
-      left: 35%;
-      width: 30%;
-      padding: 0.6em;
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #000;
-      background: gold;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      animation: blink 1s infinite;
-      z-index: 2;
+      position:absolute;
+      /* 底部 15% 处，左右各保留 10% 空白 */
+      bottom:15vh; left:10vw;
+      width:80vw; max-width:360px;
+      padding:1em;
+      font-size:1.2em;
+      font-weight:bold;
+      color:#000; background:gold;
+      border:none; border-radius:4px;
+      cursor:pointer;
+      animation:blink 1s infinite;
+      z-index:2;
     }
     @keyframes blink {
       0%,100% { opacity:1 }
       50%      { opacity:0.3 }
     }
-
-    /* 弹窗，最上面固定 */
     #popup {
-      position: absolute;
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: auto;
-      transition: top 0.5s ease-out;
-      z-index: 3;
+      position:absolute;
+      top:-100%; /* 先藏到屏外 */
+      left:50%; transform:translateX(-50%);
+      width:90vw; max-width:320px;
+      transition: top .5s ease-out;
+      z-index:3;
     }
     #popup .box {
-      background: #fff;
-      padding: 1em 2em;
-      border-radius: 8px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      background:#fff;
+      padding:1em;
+      border-radius:8px;
+      text-align:center;
+      box-shadow:0 4px 12px rgba(0,0,0,0.4);
     }
-    #popup h2 { margin-bottom: 0.5em; }
-    #popup p  { margin-bottom: 1em; }
+    #popup h2 { margin-bottom:.5em; font-size:1.4em }
+    #popup p  { margin-bottom:1em; font-size:1em }
     #popup button {
-      margin: 0 0.5em;
-      padding: 0.6em 1.2em;
-      font-size: 1em;
-      cursor: pointer;
-      border: none;
-      border-radius: 4px;
+      margin:0 .3em;
+      padding:.6em 1em;
+      font-size:1em;
+      border:none; border-radius:4px;
+      cursor:pointer;
     }
-    #play    { background: #28a; color: #fff }
-    #support { background: #4a4; color: #fff }
+    #play    { background:#28a; color:#fff }
+    #support { background:#4a4; color:#fff }
   </style>
 </head>
 <body>
   <div id="wrapper">
     <div id="full">
-      <!-- 完整截图（包括导航） -->
-      <img src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png" alt="Full view"/>
+      <img src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png" alt="Full View">
     </div>
-    <!-- 闪烁 Cash Out 按钮，始终在视口内 -->
     <button id="cashBtn">Cash Out</button>
-    <!-- 弹窗 初始在视口之外 -->
     <div id="popup">
       <div class="box">
         <h2>Congratulations!</h2>
@@ -103,25 +89,22 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const full   = document.getElementById('full');
-      const btn    = document.getElementById('cashBtn');
-      const popup  = document.getElementById('popup');
+    window.addEventListener('load', () => {
+      const full  = document.getElementById('full');
+      const btn   = document.getElementById('cashBtn');
+      const pop   = document.getElementById('popup');
 
       btn.addEventListener('click', () => {
-        // 把完整截图往下推进视口
-        full.style.top = '0';
-        // 隐藏闪烁按钮
-        btn.style.display = 'none';
-        // 弹窗也往下滑到顶部
-        popup.style.top = '20px';
+        full.style.top = '0';          // 滑下完整截图
+        btn.style.display = 'none';    // 隐藏按钮
+        pop.style.top = '10vh';        // 弹窗滑入
       });
 
       document.getElementById('play').onclick = () => {
         location.href = 'https://www.9kbossau.com/playgame/mines';
       };
       document.getElementById('support').onclick = () => {
-        window.open('https://t.me/your_telegram_channel', '_blank');
+        window.open('https://t.me/your_telegram_channel','_blank');
       };
     });
   </script>
