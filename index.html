@@ -13,65 +13,68 @@
     }
     #container {
       position: relative;
-      width: 90vw;
-      max-width: 800px;
+      width: 90vw; max-width: 800px;
     }
-    #main-img {
-      width: 100%;
-      height: auto;
-      display: block;
+    img {
+      width: 100%; height: auto; display: block;
       border-radius: 8px;
     }
-    /* hotspot 覆盖 Cash Out 按钮 */
+    /* 第二张图默认隐藏 */
+    #img2 { display: none; }
+    /* 覆盖在第一张的热点 */
     #hotspot {
       position: absolute;
-      left: 28%;    /* 根据实际截图微调 */
-      top: 58%;     /* 根据实际截图微调 */
-      width: 44%;   /* 根据实际截图微调 */
-      height: 12%;  /* 根据实际截图微调 */
+      left: 28%; top: 58%;
+      width: 44%; height: 12%;
       cursor: pointer;
     }
     /* 闪烁箭头 */
     #hotspot .arrow {
-      position: absolute;
-      left: 50%;
-      top: -1.5em;
+      position: absolute; left: 50%; top: -1.5em;
       transform: translateX(-50%);
-      font-size: 2em;
-      color: red;
+      font-size: 2em; color: red;
       animation: blink 0.8s infinite;
       user-select: none;
     }
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50%      { opacity: 0; }
+      0%,100%{opacity:1} 50%{opacity:0}
     }
   </style>
 </head>
 <body>
   <div id="container">
+    <!-- 第一张图 -->
     <img
-      id="main-img"
+      id="img1"
       src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
       alt="Cash Out Screen">
+
+    <!-- 第二张图 -->
+    <img
+      id="img2"
+      src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png"
+      alt="Big Win Screen">
+
+    <!-- 点击区域和闪烁箭头，只在第一张上生效 -->
     <div id="hotspot">
       <div class="arrow">⬅️</div>
     </div>
   </div>
 
   <script>
-    const img = document.getElementById('main-img');
+    const img1 = document.getElementById('img1');
+    const img2 = document.getElementById('img2');
     const hot = document.getElementById('hotspot');
 
     hot.addEventListener('click', () => {
-      // 切换到第二张图
-      img.src = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
-      // 隐藏热点
+      // 切换显示
+      img1.style.display = 'none';
+      img2.style.display = 'block';
       hot.style.display = 'none';
 
       // 弹窗引导
       setTimeout(() => {
-        if (confirm('You’ve cashed out big! 🚀\n\nPress OK to PLAY NOW, or Cancel to CONTACT SUPPORT.')) {
+        if (confirm('🎉 You’ve cashed out big!\n\nPress OK to PLAY NOW, or Cancel to CONTACT SUPPORT.')) {
           window.location.href = 'https://www.9kbossau.com/playgame/mines';
         } else {
           window.open('https://t.me/bnn20230323', '_blank');
