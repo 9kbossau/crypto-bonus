@@ -2,111 +2,129 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>9kBOSS 动画演示</title>
+  <title>🤑 Cash Out Animation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       background: #000;
       color: #fff;
       text-align: center;
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
     }
-    #wrap {
+    #container {
       position: relative;
       max-width: 400px;
-      margin: 50px auto;
+      margin: 60px auto;
     }
-    #demo-img {
+    #main-img {
       width: 100%;
       border-radius: 8px;
     }
     #cash-btn {
-      display: inline-block;
-      margin-top: 12px;
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
       padding: 12px 24px;
-      background: #f90;
+      background: #ffcc00;
       color: #000;
       font-weight: bold;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      animation: pulse 1s infinite;
     }
-    /* 弹窗样式 */
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 8px #ffcc00; }
+      50%  { box-shadow: 0 0 20px #ffcc00; }
+      100% { box-shadow: 0 0 8px #ffcc00; }
+    }
+
+    /* Modal */
     #modal {
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.8);
+      display: flex;
       justify-content: center;
       align-items: center;
     }
-    #modal .box {
+    #modal .dialog {
       background: #111;
       padding: 24px;
       border-radius: 8px;
+      width: 90%;
       max-width: 320px;
     }
-    #modal .box button {
+    #modal h2 {
+      margin-top: 0;
+      font-size: 20px;
+      color: #ffcc00;
+    }
+    #modal button {
       width: 100%;
-      margin: 8px 0;
       padding: 12px;
+      margin: 8px 0;
       font-size: 16px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
     }
-    #play-btn { background: #0c0; color: #fff; }
-    #support-btn { background: #09f; color: #fff; }
+    #start-game { background: #0f0; color: #fff; }
+    #contact-support { background: #09f; color: #fff; }
   </style>
 </head>
 <body>
-  <div id="wrap">
-    <!-- 第一张截图 -->
-    <img id="demo-img"
+
+  <div id="container">
+    <!-- 第一张图 -->
+    <img id="main-img"
          src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
-         alt="Game Screen 1">
-    <button id="cash-btn">Cash Out</button>
+         alt="Cash Out Screen">
+    <button id="cash-btn">CASH OUT</button>
   </div>
 
-  <!-- 引导弹窗 -->
+  <!-- 弹窗 -->
   <div id="modal">
-    <div class="box">
-      <h3>🎉 恭喜您获得收益！</h3>
-      <button id="play-btn">🚀 立即注册并充值游戏</button>
-      <button id="support-btn">💬 联系 Telegram 客服</button>
+    <div class="dialog">
+      <h2>Congratulations! 🎉</h2>
+      <p>You just cashed out big! What’s next?</p>
+      <button id="start-game">START PLAYING NOW</button>
+      <button id="contact-support">CONTACT SUPPORT</button>
     </div>
   </div>
 
   <script>
-    // 第二张截图地址
+    const firstImg = document.getElementById('main-img');
+    const cashBtn = document.getElementById('cash-btn');
+    const modal = document.getElementById('modal');
+    const startBtn = document.getElementById('start-game');
+    const supportBtn = document.getElementById('contact-support');
+
+    // 第二张图地址
     const secondImgURL = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
 
-    const imgEl      = document.getElementById('demo-img');
-    const cashBtn    = document.getElementById('cash-btn');
-    const modal      = document.getElementById('modal');
-    const playBtn    = document.getElementById('play-btn');
-    const supportBtn = document.getElementById('support-btn');
-
     cashBtn.addEventListener('click', () => {
-      // 切换到第二张图
-      imgEl.src = secondImgURL;
-
-      // 0.8 秒后弹出引导弹窗
-      setTimeout(() => {
-        modal.style.display = 'flex';
-      }, 800);
+      // 切换图片
+      firstImg.src = secondImgURL;
+      // 隐藏闪烁按钮
+      cashBtn.style.display = 'none';
+      // 0.8s 后弹窗
+      setTimeout(() => modal.style.display = 'flex', 800);
     });
 
-    // “立即注册并充值游戏”按钮
-    playBtn.addEventListener('click', () => {
-      window.location.href = 'https://yourgame.example.com/signup';  // 填你的游戏注册链接
+    // “开始游戏”
+    startBtn.addEventListener('click', () => {
+      window.location.href = 'https://www.9kbossau.com/playgame/mines';
     });
-    // “联系 Telegram 客服”按钮
+    // “联系客服”
     supportBtn.addEventListener('click', () => {
       window.open('https://t.me/bnn20230323', '_blank');
     });
   </script>
+
 </body>
 </html>
