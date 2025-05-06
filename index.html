@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crypto Bonus</title>
   <style>
@@ -20,31 +20,40 @@
       max-width: 800px;
       width: 100%;
     }
-    img {
+    #mainImg {
       width: 100%;
       display: block;
     }
-    #overlayText {
+    /* 覆盖在图片 Cash Out 按钮上的闪烁文字 */
+    #blinkOverlay {
       position: absolute;
-      bottom: 30px;
+      cursor: pointer;
+      /* 下面的尺寸和位置请根据你的图片微调 */
+      width: 200px;
+      height: 50px;
       left: 50%;
+      bottom: 30px;
       transform: translateX(-50%);
-      font-size: 20px;
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: auto;
     }
-    /* 闪烁 Cash Out 文本 */
-    #overlayText .blink {
-      display: inline-block;
-      color: #ff0;
-      animation: blinkText 1s infinite;
+    #blinkOverlay span {
+      font-size: 24px;
       font-weight: bold;
+      color: #fff;
+      background: #f90;
+      padding: 10px 20px;
+      border-radius: 4px;
+      animation: blinkText 1s infinite;
     }
     @keyframes blinkText {
       0%,100% { opacity: 1; }
       50%      { opacity: 0.2; }
     }
 
-    /* 弹框样式 */
+    /* 弹框 */
     #popup {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -70,12 +79,14 @@
 </head>
 <body>
   <div id="container">
-    <!-- 第一张图，cash out 前 -->
-    <img id="mainImg" src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png" alt="Cash Out Prompt" />
+    <!-- 第一张图 -->
+    <img id="mainImg"
+         src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
+         alt="Click Cash Out"/>
 
-    <!-- 指示文字 -->
-    <div id="overlayText">
-      Click <span class="blink">Cash Out</span> below!
+    <!-- 闪烁覆盖层，只能点击这里 -->
+    <div id="blinkOverlay">
+      <span>Cash Out</span>
     </div>
   </div>
 
@@ -93,17 +104,15 @@
   </div>
 
   <script>
-    const container = document.getElementById('container');
-    const mainImg   = document.getElementById('mainImg');
-    const overlay   = document.getElementById('overlayText');
-    const popup     = document.getElementById('popup');
+    const blink = document.getElementById('blinkOverlay');
+    const img   = document.getElementById('mainImg');
+    const popup = document.getElementById('popup');
 
-    // 点击 anywhere 触发 cash-out 效果
-    container.addEventListener('click', () => {
+    blink.addEventListener('click', () => {
       // 切换到第二张“赚钱”图片
-      mainImg.src = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
-      // 隐藏提示文字
-      overlay.style.display = 'none';
+      img.src = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
+      // 隐藏闪烁层
+      blink.style.display = 'none';
       // 弹出引导框
       popup.style.display = 'flex';
     });
