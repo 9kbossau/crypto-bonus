@@ -1,124 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Crypto Bonus</title>
   <style>
-    body {
-      margin: 0;
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      color: #fff;
-      font-family: sans-serif;
+    html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:#000; }
+    #container { position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+    .scene {
+      position:absolute; top:0; left:0;
+      width:100%; height:100%;
+      background-size:cover;
+      background-position:center center;
     }
-    #container {
-      position: relative;
-      max-width: 800px;
-      width: 100%;
-    }
-    #mainImg {
-      width: 100%;
-      display: block;
+    #scene1 { background-image:url('https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png'); }
+    #scene2 { 
+      background-image:url('https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png');
+      display:none;
     }
 
-    /* 闪烁的 Cash Out 提示框 */
-    #flashBox {
-      position: absolute;
-      /* 下面四个值请根据按钮在图片中的真实位置微调 */
-      left: calc(50% - 110px);  /* 水平中心向左偏移一半宽度 */
-      bottom: 95px;             /* 距离底部的高度 */
-      width: 220px;             /* 和按钮宽度一致 */
-      height: 58px;             /* 和按钮高度一致 */
-      border: 4px solid #ff0;
-      border-radius: 8px;
-      box-sizing: border-box;
-      pointer-events: none;     /* 只提示不拦截点击 */
-      animation: blinkBorder 1s infinite;
+    /* 闪烁的 Cash Out 提示 */
+    #tip {
+      position:absolute;
+      bottom:10%; left:50%;
+      transform:translateX(-50%);
+      padding: 0.5em 1em;
+      background: rgba(255,255,255,0.8);
+      color: #000;
+      font-size:2vw;
+      font-weight:bold;
+      border-radius:5px;
+      animation: blink 1s infinite;
+      cursor:pointer;
     }
-    @keyframes blinkBorder {
-      0%,100% { opacity: 1; }
-      50%     { opacity: 0.2; }
-    }
-
-    /* 完全透明的点击捕获层，覆盖在按钮上 */
-    #clickCatcher {
-      position: absolute;
-      left: calc(50% - 110px);
-      bottom: 95px;
-      width: 220px;
-      height: 58px;
-      cursor: pointer;
-      background: transparent;
+    @keyframes blink {
+      0%,50%,100% { opacity:1; }
+      25%,75% { opacity:0; }
     }
 
-    /* 弹框 */
+    /* 弹窗按钮 */
     #popup {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      position:absolute;
+      top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      background:rgba(0,0,0,0.8);
+      padding:2em;
+      border-radius:10px;
+      text-align:center;
+      display:none;
     }
-    #popup .box {
-      background: #222;
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
+    #popup button {
+      margin:0.5em;
+      padding:0.5em 1em;
+      font-size:1.5vw;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
     }
-    #popup .box button {
-      margin: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+    #playBtn { background:#28a745; color:#fff; }
+    #supportBtn { background:#17a2b8; color:#fff; }
   </style>
 </head>
 <body>
   <div id="container">
-    <!-- 第一张图 -->
-    <img id="mainImg"
-         src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
-         alt="Click Cash Out"/>
+    <div id="scene1" class="scene"></div>
+    <div id="scene2" class="scene"></div>
 
-    <!-- 闪烁提示框 -->
-    <div id="flashBox"></div>
-    <!-- 透明点击层 -->
-    <div id="clickCatcher"></div>
-  </div>
+    <div id="tip">Click “Cash Out”!</div>
 
-  <!-- 弹框 -->
-  <div id="popup">
-    <div class="box">
-      <p>You just won big! 🎉</p>
-      <button onclick="location.href='https://www.9kbossau.com/playgame/mines'">
-        Start Playing Now
-      </button>
-      <button onclick="location.href='https://t.me/YourTelegramChannel'">
-        Contact Support
-      </button>
+    <div id="popup">
+      <p style="color:#fff; font-size:2vw; margin-bottom:1em;">You’ve cashed out big! What do you want to do next?</p>
+      <button id="playBtn">Start Playing</button>
+      <button id="supportBtn">Contact Support</button>
     </div>
   </div>
 
   <script>
-    const catcher = document.getElementById('clickCatcher');
-    const img     = document.getElementById('mainImg');
-    const flash   = document.getElementById('flashBox');
-    const popup   = document.getElementById('popup');
+    const tip = document.getElementById('tip');
+    const scene1 = document.getElementById('scene1');
+    const scene2 = document.getElementById('scene2');
+    const popup = document.getElementById('popup');
+    const playBtn = document.getElementById('playBtn');
+    const supportBtn = document.getElementById('supportBtn');
 
-    catcher.addEventListener('click', () => {
-      // 切到第二张图
-      img.src = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
-      // 隐藏提示和点击层
-      flash.style.display = 'none';
-      catcher.style.display = 'none';
-      // 显示弹框
-      popup.style.display = 'flex';
+    // 点击提示区域（模拟点击“Cash Out”）
+    tip.addEventListener('click', () => {
+      scene1.style.display = 'none';
+      tip.style.display = 'none';
+      scene2.style.display = 'block';
+      // 延迟弹窗显示，给用户一个“惊喜”感
+      setTimeout(() => popup.style.display = 'block', 300);
+    });
+
+    // 按钮跳转
+    playBtn.addEventListener('click', () => {
+      window.location.href = 'https://www.9kbossau.com/playgame/mines';
+    });
+    supportBtn.addEventListener('click', () => {
+      // 如果你想打开 Telegram 频道：
+      window.open('https://t.me/your_telegram_channel', '_blank');
     });
   </script>
 </body>
