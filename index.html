@@ -2,131 +2,111 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>🎉 You Win! Click to Cash Out</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crypto Bonus</title>
   <style>
-    body, html {
-      margin: 0; padding: 0;
-      width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
+    body {
+      margin: 0;
       background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
       font-family: sans-serif;
-      overflow: hidden;
     }
     #container {
       position: relative;
-      max-width: 100vw; max-height: 100vh;
+      max-width: 800px;
+      width: 100%;
     }
-    #first-img, #second-img {
+    img {
+      width: 100%;
       display: block;
-      width: 100%; height: auto;
-      user-select: none;
     }
-    #second-img { display: none; }
-
-    /* 点击区域 hotspot */
-    #hotspot {
+    #overlayText {
       position: absolute;
-      left: 30%;    /* 根据按钮在图中的水平位置自行微调 */
-      top: 75%;     /* 根据按钮在图中的垂直位置自行微调 */
-      width: 40%;   /* 覆盖按钮宽度 */
-      height: 12%;  /* 覆盖按钮高度 */
-      cursor: pointer;
-    }
-    /* 闪烁箭头 */
-    #hotspot .arrow {
-      position: absolute;
-      left: 50%; top: -1.8em;
+      bottom: 30px;
+      left: 50%;
       transform: translateX(-50%);
-      font-size: 2em;
-      color: red;
-      animation: blink 0.8s infinite;
+      font-size: 20px;
+      text-align: center;
     }
-    @keyframes blink {
+    /* 闪烁 Cash Out 文本 */
+    #overlayText .blink {
+      display: inline-block;
+      color: #ff0;
+      animation: blinkText 1s infinite;
+      font-weight: bold;
+    }
+    @keyframes blinkText {
       0%,100% { opacity: 1; }
-      50% { opacity: 0; }
+      50%      { opacity: 0.2; }
     }
 
-    /* 弹窗背景 */
-    #modal-bg {
+    /* 弹框样式 */
+    #popup {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
       display: none;
-      position: fixed; top:0; left:0; right:0; bottom:0;
-      background: rgba(0,0,0,0.6);
-      align-items: center; justify-content: center;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
-    /* 弹窗内容 */
-    #modal {
-      background: #fff;
-      padding: 20px; border-radius: 8px;
-      text-align: center; max-width: 90%; width: 300px;
+    #popup .box {
+      background: #222;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
     }
-    #modal h2 { margin-top: 0; }
-    #modal button {
-      margin: 10px 5px 0;
+    #popup .box button {
+      margin: 10px;
       padding: 10px 20px;
-      font-size: 1em;
-      border: none; border-radius: 4px;
+      font-size: 16px;
       cursor: pointer;
     }
-    #play-btn { background: #28a745; color: #fff; }
-    #support-btn { background: #007bff; color: #fff; }
   </style>
 </head>
 <body>
-
   <div id="container">
-    <!-- 第一张图 -->
-    <img id="first-img"
-      src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png"
-      alt="Cash Out Prompt" />
+    <!-- 第一张图，cash out 前 -->
+    <img id="mainImg" src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.02.png" alt="Cash Out Prompt" />
 
-    <!-- 第二张图 -->
-    <img id="second-img"
-      src="https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png"
-      alt="You Win!" />
-
-    <!-- 点击热点 -->
-    <div id="hotspot">
-      <div class="arrow">⬅️</div>
+    <!-- 指示文字 -->
+    <div id="overlayText">
+      Click <span class="blink">Cash Out</span> below!
     </div>
   </div>
 
-  <!-- 弹窗 -->
-  <div id="modal-bg">
-    <div id="modal">
-      <h2>Congratulations!</h2>
-      <p>You just cashed out big! 🎉</p>
-      <button id="play-btn">Start Playing</button>
-      <button id="support-btn">Contact Support</button>
+  <!-- 弹框 -->
+  <div id="popup">
+    <div class="box">
+      <p>You just won big! 🎉</p>
+      <button onclick="location.href='https://www.9kbossau.com/playgame/mines'">
+        Start Playing Now
+      </button>
+      <button onclick="location.href='https://t.me/YourTelegramChannel'">
+        Contact Support
+      </button>
     </div>
   </div>
 
   <script>
-    const hotspot = document.getElementById('hotspot');
-    const firstImg = document.getElementById('first-img');
-    const secondImg = document.getElementById('second-img');
-    const modalBg = document.getElementById('modal-bg');
-    const playBtn = document.getElementById('play-btn');
-    const supportBtn = document.getElementById('support-btn');
+    const container = document.getElementById('container');
+    const mainImg   = document.getElementById('mainImg');
+    const overlay   = document.getElementById('overlayText');
+    const popup     = document.getElementById('popup');
 
-    hotspot.addEventListener('click', () => {
-      // 隐藏第一张，显示第二张
-      firstImg.style.display = 'none';
-      hotspot.style.display = 'none';
-      secondImg.style.display = 'block';
-      // 延迟一下再弹窗，给切换动画感
-      setTimeout(() => {
-        modalBg.style.display = 'flex';
-      }, 300);
-    });
-
-    playBtn.addEventListener('click', () => {
-      window.location.href = 'https://www.9kbossau.com/playgame/mines';
-    });
-    supportBtn.addEventListener('click', () => {
-      window.open('https://t.me/bnn20230323', '_blank');
+    // 点击 anywhere 触发 cash-out 效果
+    container.addEventListener('click', () => {
+      // 切换到第二张“赚钱”图片
+      mainImg.src = 'https://raw.githubusercontent.com/9kbossau/crypto-bonus/617e0ff4ea8c001436cdb7751b5027b8ec4e7b42/%E6%88%AA%E5%B1%8F2025-05-06%2015.59.43.png';
+      // 隐藏提示文字
+      overlay.style.display = 'none';
+      // 弹出引导框
+      popup.style.display = 'flex';
     });
   </script>
-
 </body>
 </html>
