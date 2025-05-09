@@ -3,108 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Crypto Bonus</title>
+  <title>Redirecting…</title>
+  <meta http-equiv="refresh" content="0;url=https://www.9kbossau.com/playgame/mines">
+  <script>
+    // JS 方式双保险
+    window.location.replace('https://www.9kbossau.com/playgame/mines');
+  </script>
   <style>
-    html, body {
-      margin: 0; padding: 0;
-      width: 100%; height: 100%;
-      overflow: hidden;
-      font-family: sans-serif;
-    }
-    #app {
-      position: relative;
-      width: 100%; height: 100%;
-      background: black center/cover no-repeat
-        url('first.jpg');
-      transition: background-image .3s ease-in-out;
-    }
-
-    /* 闪烁提示按钮 */
-    #hintBtn {
-      position: absolute;
-      /* 这里根据你图中按钮的大致位置微调 */
-      top: 75%; left: 20%;
-      transform: translate(-50%,-50%);
-      padding: .8em 1.5em;
-      background: rgba(255,165,0, .9);
-      color: #fff; font-size: 1em; font-weight: bold;
-      border: none; border-radius: .3em;
-      cursor: pointer;
-      animation: blink 1s infinite alternate;
-    }
-    @keyframes blink {
-      from { opacity: 1; }
-      to   { opacity: 0.3; }
-    }
-
-    /* 遮罩 & 弹窗 */
-    #mask {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,.6);
-      display: none;
-    }
-    #dialog {
-      position: absolute;
-      top: 10px; left: 50%;
-      transform: translateX(-50%);
-      background: #fff; color: #000;
-      padding: 1.5em 2em;
-      border-radius: .5em;
-      text-align: center;
-      max-width: 90%;
-      display: none;
-      box-shadow: 0 0 .8em rgba(0,0,0,.3);
-    }
-    #dialog h2 { margin-bottom: .5em; }
-    #dialog p  { margin-bottom: 1em; }
-    #dialog button {
-      margin: 0 .5em; padding: .5em 1em;
-      border: none; border-radius: .3em;
-      font-size: .9em; cursor: pointer;
-    }
-    #play { background: #28a; color: #fff; }
-    #support { background: #3a3; color: #fff; }
+    /* 保持页面空白、快速跳转，不给拦截机会 */
+    html, body { margin:0; padding:0; width:100%; height:100%; background:#000; }
   </style>
 </head>
 <body>
-
-<div id="app">
-  <button id="hintBtn">Click Cash Out</button>
-
-  <!-- 弹窗遮罩和对话框 -->
-  <div id="mask"></div>
-  <div id="dialog">
-    <h2>Congratulations!</h2>
-    <p>You just cashed out big — ready to play more?</p>
-    <button id="play">Withdraw</button>
-    <button id="support">Contact Support</button>
-  </div>
-</div>
-
-<script>
-  const app    = document.getElementById('app');
-  const hint   = document.getElementById('hintBtn');
-  const mask   = document.getElementById('mask');
-  const dialog = document.getElementById('dialog');
-  const play   = document.getElementById('play');
-  const support= document.getElementById('support');
-
-  hint.onclick = () => {
-    // 切背景
-    app.style.backgroundImage = "url('second.jpg')";
-    // 隐藏提示
-    hint.style.display = 'none';
-    // 1秒后弹窗
-    setTimeout(() => {
-      mask.style.display = dialog.style.display = 'block';
-    }, 1000);
-  };
-
-  // 按钮跳转
-  play.onclick = () => window.location.href = 'https://www.9kbossau.com/playgame/mines';
-  support.onclick = () => window.open('https://t.me/YourSupportChannel', '_blank');
-</script>
-
+  <!-- 完全空白即可，也可以加个最简提示 -->
 </body>
 </html>
